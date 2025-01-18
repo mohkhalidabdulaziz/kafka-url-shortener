@@ -1,0 +1,21 @@
+version: "3.4"
+services:
+  zookeeper:
+    image: confluent/zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    networks:
+      - kafka_net
+  kafka:
+    image: confluent/kafka
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka_net
+    restart: on-failure
+networks:
+  kafka_net:
+    driver: "bridge"
